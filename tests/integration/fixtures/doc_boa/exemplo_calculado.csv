@@ -1,0 +1,16 @@
+campo,trade_1,trade_2,trade_3,netting_set_total
+notional,10000000,5000000,8000000,
+delta,1,-1,1,
+M_anos_prazo_remanescente,1,0.5,2,
+MF_i,1,0.70710678,1,
+effective_notional_i,10000000,-3535533.91,8000000,
+SF_fx,,,,0.04
+addon,,,,578578.64
+mtm_v,200000,-80000,50000,170000
+colateral_c,,,,0
+v_menos_c,,,,170000
+multiplicador,,,,1
+pfe,,,,578578.64
+rc,,,,170000
+alpha,,,,1.4
+ead,,,,1048010.10

@@ -1,0 +1,40 @@
+{
+  "run_id": "doc_boa",
+  "action_id": "07_stability_tests",
+  "test_id": "exposure_at_default_ead__choque_spread_bonds_corp__10pct",
+  "metric": "Exposure at Default (EAD)",
+  "timestamp": "2026-09-23T00:40:15.506352+00:00",
+  "backend_llm": "ollama",
+  "test_code": {
+    "source": "from src.portfolio.base_portfolio import POSITIONS\nfrom src.portfolio.pricing_models import price_portfolio\nfrom src.portfolio.data_access import load_all_risk_factors\n\nfactors = load_all_risk_factors()\nmarket = {name: s.iloc[-1] for name, s in factors.items()}\nmarket['spread_bonds_corp'] = market['spread_bonds_corp'] * (1 + 0.1)\nshocked_value = sum(price_portfolio(POSITIONS, market).values())\n# valor_choque = compute({'value': shocked_value}, {'returns': base_returns}, params)['valor']\n",
+    "file": "gerado dinamicamente por 07_stability_tests",
+    "hash": "sha256:863c210447e4db2ce739e68d74b00996b77f8df74322c6ee64de549f8555300e"
+  },
+  "data_used": {
+    "risk_factors": [
+      "data/risk_factors/spread_bonds_corp.csv"
+    ],
+    "portfolio_snapshot": "src/portfolio/base_portfolio.py:POSITIONS",
+    "scenario": "isolado",
+    "params": {
+      "choque_pct": 0.1,
+      "metrica_params": {
+        "alpha": 1.4,
+        "SF_fx": 0.04
+      }
+    }
+  },
+  "results": {
+    "metrica": "Exposure at Default (EAD)",
+    "cenario": "isolado",
+    "fator": "spread_bonds_corp",
+    "choque": 0.1,
+    "valor_base": 84081521.99427752,
+    "valor_choque": 83997164.0858049,
+    "delta_metrica": -84357.9084726274,
+    "elasticidade": -0.010032871250638004,
+    "flag": "ok",
+    "dentro_do_limite": true
+  },
+  "notes": []
+}

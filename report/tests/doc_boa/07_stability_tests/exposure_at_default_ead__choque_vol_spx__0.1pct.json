@@ -1,0 +1,40 @@
+{
+  "run_id": "doc_boa",
+  "action_id": "07_stability_tests",
+  "test_id": "exposure_at_default_ead__choque_vol_spx__0.1pct",
+  "metric": "Exposure at Default (EAD)",
+  "timestamp": "2026-09-23T00:40:15.444166+00:00",
+  "backend_llm": "ollama",
+  "test_code": {
+    "source": "from src.portfolio.base_portfolio import POSITIONS\nfrom src.portfolio.pricing_models import price_portfolio\nfrom src.portfolio.data_access import load_all_risk_factors\n\nfactors = load_all_risk_factors()\nmarket = {name: s.iloc[-1] for name, s in factors.items()}\nmarket['vol_spx'] = market['vol_spx'] * (1 + 0.001)\nshocked_value = sum(price_portfolio(POSITIONS, market).values())\n# valor_choque = compute({'value': shocked_value}, {'returns': base_returns}, params)['valor']\n",
+    "file": "gerado dinamicamente por 07_stability_tests",
+    "hash": "sha256:d424bb3b855ba55eb88719b8a91141338b809fe270dfbd0c6feff2262e0784bf"
+  },
+  "data_used": {
+    "risk_factors": [
+      "data/risk_factors/vol_spx.csv"
+    ],
+    "portfolio_snapshot": "src/portfolio/base_portfolio.py:POSITIONS",
+    "scenario": "isolado",
+    "params": {
+      "choque_pct": 0.001,
+      "metrica_params": {
+        "alpha": 1.4,
+        "SF_fx": 0.04
+      }
+    }
+  },
+  "results": {
+    "metrica": "Exposure at Default (EAD)",
+    "cenario": "isolado",
+    "fator": "vol_spx",
+    "choque": 0.001,
+    "valor_base": 84081521.99427752,
+    "valor_choque": 84081523.62561211,
+    "delta_metrica": 1.631334587931633,
+    "elasticidade": 1.940182039096128e-05,
+    "flag": "ok",
+    "dentro_do_limite": true
+  },
+  "notes": []
+}

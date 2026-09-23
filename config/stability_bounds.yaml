@@ -1,0 +1,22 @@
+# Limites de elasticidade e parâmetros de backtest usados pelas Actions 07 e 08
+# (CLAUDE.md §Action 07 / §Action 08). Valores default conservadores — ajustar por
+# métrica à medida que métricas forem implementadas em src/metrics/.
+
+stability:
+  choques_pct: [0.001, 0.01, 0.05, 0.10, 0.25]
+  default_bounds:
+    tipo: "linear"          # linear | convexa
+    desvio_linearidade_max: 0.20   # ±20% (métricas lineares)
+    fator_explosao_max: 50          # variação > 50x o choque => instabilidade numérica
+    insensibilidade_min_pct: 0.001  # variação < 0.1% da métrica para choque de 10% => suspeita de bug
+  overrides_por_metrica: {}   # preencher conforme métricas forem cadastradas na Action 02/06
+
+backtest:
+  janela_minima_dias_uteis: 250
+  holding_periods: [1, 10, 30, 60, 90, 180]
+  overlapping_windows: true  # ver decisions_log — violação de i.i.d. documentada como limitação
+  semaforo_basileia:
+    janela_dias: 250
+    zona_verde_max_excecoes: 4
+    zona_amarela_max_excecoes: 9
+    # >= zona_amarela_max_excecoes + 1 => zona vermelha

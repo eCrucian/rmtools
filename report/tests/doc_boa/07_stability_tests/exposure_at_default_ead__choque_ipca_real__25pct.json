@@ -1,0 +1,40 @@
+{
+  "run_id": "doc_boa",
+  "action_id": "07_stability_tests",
+  "test_id": "exposure_at_default_ead__choque_ipca_real__25pct",
+  "metric": "Exposure at Default (EAD)",
+  "timestamp": "2026-09-23T00:40:15.296331+00:00",
+  "backend_llm": "ollama",
+  "test_code": {
+    "source": "from src.portfolio.base_portfolio import POSITIONS\nfrom src.portfolio.pricing_models import price_portfolio\nfrom src.portfolio.data_access import load_all_risk_factors\n\nfactors = load_all_risk_factors()\nmarket = {name: s.iloc[-1] for name, s in factors.items()}\nmarket['ipca_real'] = market['ipca_real'] * (1 + 0.25)\nshocked_value = sum(price_portfolio(POSITIONS, market).values())\n# valor_choque = compute({'value': shocked_value}, {'returns': base_returns}, params)['valor']\n",
+    "file": "gerado dinamicamente por 07_stability_tests",
+    "hash": "sha256:8bbdfd4b0cbfb9554a8f2927ead7538c4c27786d441136a387fa8f54c1c7220d"
+  },
+  "data_used": {
+    "risk_factors": [
+      "data/risk_factors/ipca_real.csv"
+    ],
+    "portfolio_snapshot": "src/portfolio/base_portfolio.py:POSITIONS",
+    "scenario": "isolado",
+    "params": {
+      "choque_pct": 0.25,
+      "metrica_params": {
+        "alpha": 1.4,
+        "SF_fx": 0.04
+      }
+    }
+  },
+  "results": {
+    "metrica": "Exposure at Default (EAD)",
+    "cenario": "isolado",
+    "fator": "ipca_real",
+    "choque": 0.25,
+    "valor_base": 84081521.99427752,
+    "valor_choque": 83301359.1166988,
+    "delta_metrica": -780162.8775787205,
+    "elasticidade": -0.03711459350756364,
+    "flag": "ok",
+    "dentro_do_limite": true
+  },
+  "notes": []
+}

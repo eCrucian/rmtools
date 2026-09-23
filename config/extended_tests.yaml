@@ -1,0 +1,12 @@
+# Registry plugável da Action 09 (CLAUDE.md §Action 09). Cada entrada com
+# enabled: true deve ter um módulo correspondente em src/tests_extended/<id>.py
+# implementando run(context) -> ActionResult. Entradas enabled: false aparecem
+# no relatório final como "planejado, não implementado".
+
+extended_tests:
+  - id: "concentration_test"
+    enabled: true
+    description: "testa concentração por fator de risco, a partir dos resultados da Action 07"
+  - id: "liquidity_horizon_scaling"
+    enabled: true
+    description: "escalonamento por horizonte de liquidez estilo FRTB (convenção própria, não tabela oficial do BCBS), a partir dos resultados da Action 07"

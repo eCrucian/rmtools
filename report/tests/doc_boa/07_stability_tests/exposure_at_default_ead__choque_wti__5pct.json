@@ -1,0 +1,40 @@
+{
+  "run_id": "doc_boa",
+  "action_id": "07_stability_tests",
+  "test_id": "exposure_at_default_ead__choque_wti__5pct",
+  "metric": "Exposure at Default (EAD)",
+  "timestamp": "2026-09-23T00:40:15.423131+00:00",
+  "backend_llm": "ollama",
+  "test_code": {
+    "source": "from src.portfolio.base_portfolio import POSITIONS\nfrom src.portfolio.pricing_models import price_portfolio\nfrom src.portfolio.data_access import load_all_risk_factors\n\nfactors = load_all_risk_factors()\nmarket = {name: s.iloc[-1] for name, s in factors.items()}\nmarket['wti'] = market['wti'] * (1 + 0.05)\nshocked_value = sum(price_portfolio(POSITIONS, market).values())\n# valor_choque = compute({'value': shocked_value}, {'returns': base_returns}, params)['valor']\n",
+    "file": "gerado dinamicamente por 07_stability_tests",
+    "hash": "sha256:8ca5d985ad34459a4e4d7779b78e5be1b656f878762c63ea2db1c64f660b18b8"
+  },
+  "data_used": {
+    "risk_factors": [
+      "data/risk_factors/wti.csv"
+    ],
+    "portfolio_snapshot": "src/portfolio/base_portfolio.py:POSITIONS",
+    "scenario": "isolado",
+    "params": {
+      "choque_pct": 0.05,
+      "metrica_params": {
+        "alpha": 1.4,
+        "SF_fx": 0.04
+      }
+    }
+  },
+  "results": {
+    "metrica": "Exposure at Default (EAD)",
+    "cenario": "isolado",
+    "fator": "wti",
+    "choque": 0.05,
+    "valor_base": 84081521.99427752,
+    "valor_choque": 84081521.99427752,
+    "delta_metrica": 0.0,
+    "elasticidade": 0.0,
+    "flag": "ok",
+    "dentro_do_limite": true
+  },
+  "notes": []
+}

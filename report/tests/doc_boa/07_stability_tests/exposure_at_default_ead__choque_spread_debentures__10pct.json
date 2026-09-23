@@ -1,0 +1,40 @@
+{
+  "run_id": "doc_boa",
+  "action_id": "07_stability_tests",
+  "test_id": "exposure_at_default_ead__choque_spread_debentures__10pct",
+  "metric": "Exposure at Default (EAD)",
+  "timestamp": "2026-09-23T00:40:15.492758+00:00",
+  "backend_llm": "ollama",
+  "test_code": {
+    "source": "from src.portfolio.base_portfolio import POSITIONS\nfrom src.portfolio.pricing_models import price_portfolio\nfrom src.portfolio.data_access import load_all_risk_factors\n\nfactors = load_all_risk_factors()\nmarket = {name: s.iloc[-1] for name, s in factors.items()}\nmarket['spread_debentures'] = market['spread_debentures'] * (1 + 0.1)\nshocked_value = sum(price_portfolio(POSITIONS, market).values())\n# valor_choque = compute({'value': shocked_value}, {'returns': base_returns}, params)['valor']\n",
+    "file": "gerado dinamicamente por 07_stability_tests",
+    "hash": "sha256:5591745bd66e1bedb1a339ce6887a6e1a3bf552107f81d263e3af7b4a297971c"
+  },
+  "data_used": {
+    "risk_factors": [
+      "data/risk_factors/spread_debentures.csv"
+    ],
+    "portfolio_snapshot": "src/portfolio/base_portfolio.py:POSITIONS",
+    "scenario": "isolado",
+    "params": {
+      "choque_pct": 0.1,
+      "metrica_params": {
+        "alpha": 1.4,
+        "SF_fx": 0.04
+      }
+    }
+  },
+  "results": {
+    "metrica": "Exposure at Default (EAD)",
+    "cenario": "isolado",
+    "fator": "spread_debentures",
+    "choque": 0.1,
+    "valor_base": 84081521.99427752,
+    "valor_choque": 83873748.8413204,
+    "delta_metrica": -207773.1529571265,
+    "elasticidade": -0.024710917218085948,
+    "flag": "ok",
+    "dentro_do_limite": true
+  },
+  "notes": []
+}

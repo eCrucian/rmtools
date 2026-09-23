@@ -1,0 +1,40 @@
+{
+  "run_id": "doc_boa",
+  "action_id": "07_stability_tests",
+  "test_id": "exposure_at_default_ead__choque_fed_funds__25pct",
+  "metric": "Exposure at Default (EAD)",
+  "timestamp": "2026-09-23T00:40:15.349936+00:00",
+  "backend_llm": "ollama",
+  "test_code": {
+    "source": "from src.portfolio.base_portfolio import POSITIONS\nfrom src.portfolio.pricing_models import price_portfolio\nfrom src.portfolio.data_access import load_all_risk_factors\n\nfactors = load_all_risk_factors()\nmarket = {name: s.iloc[-1] for name, s in factors.items()}\nmarket['fed_funds'] = market['fed_funds'] * (1 + 0.25)\nshocked_value = sum(price_portfolio(POSITIONS, market).values())\n# valor_choque = compute({'value': shocked_value}, {'returns': base_returns}, params)['valor']\n",
+    "file": "gerado dinamicamente por 07_stability_tests",
+    "hash": "sha256:5235e98197f532b232126513fd3e2dfd0a6602ae1cf6f864fa365c188d8ed9c3"
+  },
+  "data_used": {
+    "risk_factors": [
+      "data/risk_factors/fed_funds.csv"
+    ],
+    "portfolio_snapshot": "src/portfolio/base_portfolio.py:POSITIONS",
+    "scenario": "isolado",
+    "params": {
+      "choque_pct": 0.25,
+      "metrica_params": {
+        "alpha": 1.4,
+        "SF_fx": 0.04
+      }
+    }
+  },
+  "results": {
+    "metrica": "Exposure at Default (EAD)",
+    "cenario": "isolado",
+    "fator": "fed_funds",
+    "choque": 0.25,
+    "valor_base": 84081521.99427752,
+    "valor_choque": 82917170.0165471,
+    "delta_metrica": -1164351.9777304232,
+    "elasticidade": -0.055391574753352706,
+    "flag": "ok",
+    "dentro_do_limite": true
+  },
+  "notes": []
+}

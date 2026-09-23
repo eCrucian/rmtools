@@ -1,0 +1,60 @@
+# Registro histórico dos parâmetros usados para gerar (uma única vez) os 1000 dias
+# de histórico congelados em data/risk_factors/ (CLAUDE.md §5.3). Este arquivo é
+# documentação da geração original — editá-lo NÃO dispara regeração automática.
+# Os valores efetivos (fonte de verdade) vivem em código, em
+# src/portfolio/factors.py; este YAML é só o espelho legível/auditável exigido
+# por §5.3 ("documentar as premissas... não hardcode mágico no código").
+#
+# Congelado em: rodar `python -m src.portfolio.risk_factor_generator --freeze`
+# grava/sobrescreve data/risk_factors/*.csv. Isso já foi feito uma vez para
+# este repositório — reexecutar é uma decisão deliberada e versionada (§5.3),
+# nunca automática.
+
+status: "congelado"  # nao_gerado | congelado
+
+seed: 20260101  # src.portfolio.factors.SEED — nunca mudar após o freeze
+n_observacoes: 1000
+dias_uteis_por_ano: 252
+data_ancora_inicial: "2021-01-04"  # só rotula o eixo de datas, sem significado de mercado
+
+curvas_juros:
+  processo: "vasicek (Euler-Maruyama, floor em -0.02)"
+  # r0/theta/kappa/sigma por curva — taxas anuais decimais
+  series:
+    di_pre: {r0: 0.1075, theta: 0.10, kappa: 0.15, sigma: 0.015}
+    ipca_real: {r0: 0.055, theta: 0.05, kappa: 0.10, sigma: 0.008}
+    pre_nominal: {r0: 0.115, theta: 0.105, kappa: 0.12, sigma: 0.016}
+    ust: {r0: 0.045, theta: 0.04, kappa: 0.08, sigma: 0.007}
+    sofr: {r0: 0.050, theta: 0.045, kappa: 0.10, sigma: 0.006}
+    fed_funds: {r0: 0.0525, theta: 0.045, kappa: 0.08, sigma: 0.006}
+
+spots:
+  processo: "GBM correlacionado (Cholesky da matriz de correlação)"
+  cholesky_de: "correlation_matrix.csv"
+  series:
+    usdbrl: {s0: 5.00, mu: 0.00, sigma: 0.16}
+    ibov: {s0: 125000.0, mu: 0.08, sigma: 0.22}
+    spx: {s0: 5200.0, mu: 0.08, sigma: 0.16}
+    soja: {s0: 1350.0, mu: 0.00, sigma: 0.20}
+    brent: {s0: 82.0, mu: 0.00, sigma: 0.30}
+    wti: {s0: 78.0, mu: 0.00, sigma: 0.32}
+
+volatilidades:
+  processo: "OU no log da vol (evita vol constante, §5.3)"
+  series:
+    vol_ibov: {level0: 0.22, kappa: 0.20, sigma: 0.15}
+    vol_spx: {level0: 0.16, kappa: 0.20, sigma: 0.15}
+    vol_usdbrl: {level0: 0.14, kappa: 0.20, sigma: 0.12}
+    vol_juros: {level0: 0.18, kappa: 0.15, sigma: 0.10}
+
+spreads_credito:
+  processo: "CIR (truncamento total, nao-negativo)"
+  series:
+    spread_debentures: {r0: 0.025, theta: 0.022, kappa: 0.15, sigma: 0.006}
+    spread_bonds_corp: {r0: 0.018, theta: 0.015, kappa: 0.12, sigma: 0.005}
+
+comportamentais:
+  processo: "CIR (mesma dinâmica dos spreads — correlacionado com juros via matriz de correlação, não por resposta funcional direta)"
+  series:
+    nmd_decay_rate: {r0: 0.15, theta: 0.15, kappa: 0.20, sigma: 0.02}
+    cpr: {r0: 0.12, theta: 0.12, kappa: 0.25, sigma: 0.03}

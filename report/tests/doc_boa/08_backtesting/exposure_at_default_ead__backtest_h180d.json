@@ -1,0 +1,58 @@
+{
+  "run_id": "doc_boa",
+  "action_id": "08_backtesting",
+  "test_id": "exposure_at_default_ead__backtest_h180d",
+  "metric": "Exposure at Default (EAD)",
+  "timestamp": "2026-09-23T00:40:18.878913+00:00",
+  "backend_llm": "ollama",
+  "test_code": {
+    "source": "from src.portfolio.portfolio_history import (\n    compute_portfolio_value_series, compute_portfolio_input_series,\n)\nimport numpy as np, math\n\nvalue_series = compute_portfolio_value_series().to_numpy()\nportfolio_inputs = compute_portfolio_input_series()  # {'value':..., 'positions':[...]}\nrolling_window = 250\nholding_period = 180\nreturns = np.diff(value_series) / value_series[:-1]\nfor t in range(rolling_window, len(value_series)):\n    window_returns = returns[t-rolling_window:t].tolist()\n    var_1day = compute(portfolio_inputs[t], {'returns': window_returns}, params)['valor']\n    var_h = var_1day * math.sqrt(holding_period)\n    # realized_loss = -(value_series[t+holding_period] - value_series[t]); exceção se > var_h\n",
+    "file": "gerado dinamicamente por 08_backtesting",
+    "hash": "sha256:c538c2562fcf8dbb1139928352ed22de1492c06c9aa0da37f0b6fa664da5c52a"
+  },
+  "data_used": {
+    "portfolio_snapshot": "src/portfolio/base_portfolio.py:POSITIONS",
+    "holding_period": 180,
+    "rolling_window": 250,
+    "confidence": 0.99,
+    "overlapping_windows": true
+  },
+  "results": {
+    "metrica": "Exposure at Default (EAD)",
+    "holding_period": 180,
+    "n_obs": 570,
+    "n_exceptions": 0,
+    "kupiec": {
+      "n_obs": 570,
+      "n_exceptions": 0,
+      "taxa_observada": 0.0,
+      "taxa_esperada": 0.010000000000000009,
+      "lr_stat": 11.457382872991653,
+      "critical_value": 3.8414588206941254,
+      "p_value": 0.0007121051764560349,
+      "rejeita_h0": true
+    },
+    "christoffersen": {
+      "n00": 569,
+      "n01": 0,
+      "n10": 0,
+      "n11": 0,
+      "pi01": 0.0,
+      "pi11": 0.0,
+      "lr_stat": 0.0,
+      "critical_value": 3.8414588206941254,
+      "p_value": 1.0,
+      "rejeita_h0": false
+    },
+    "cobertura_condicional": {
+      "lr_stat": 11.457382872991653,
+      "critical_value": 5.991464547107982,
+      "p_value": 0.003251329021634386,
+      "rejeita_h0": true
+    },
+    "semaforo": "verde",
+    "semaforo_janela_dias": 250,
+    "semaforo_e_canonico": false
+  },
+  "notes": []
+}

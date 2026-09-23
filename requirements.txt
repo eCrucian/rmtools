@@ -1,0 +1,21 @@
+# Base runtime assumido pelo pipeline (CLAUDE.md §2.2): stdlib + numpy + pandas.
+numpy
+pandas
+
+# Dependências de desenvolvimento/teste (não assumidas no sandbox de execução
+# do código gerado pela Action 06 — só usadas para rodar o próprio pipeline/testes).
+pytest
+coverage
+
+# Leitura de config/*.yaml pelo harness do pipeline (não pelo código gerado em
+# sandbox). Tem fallback próprio em src/pipeline/config.py caso não esteja
+# instalada, seguindo o mesmo padrão try/except do resto do projeto.
+pyyaml
+
+# Opcionais — o pipeline e o código de referência gerado devem funcionar sem elas
+# (fallback numpy/pandas puro obrigatório em todo lugar que as use). Instale para
+# melhor qualidade de output (scipy: estatísticas; tabulate: tabelas via to_markdown;
+# matplotlib: gráficos PNG em vez do fallback SVG manual).
+# scipy
+# tabulate
+# matplotlib

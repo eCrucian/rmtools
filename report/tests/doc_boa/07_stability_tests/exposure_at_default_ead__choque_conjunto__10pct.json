@@ -1,0 +1,59 @@
+{
+  "run_id": "doc_boa",
+  "action_id": "07_stability_tests",
+  "test_id": "exposure_at_default_ead__choque_conjunto__10pct",
+  "metric": "Exposure at Default (EAD)",
+  "timestamp": "2026-09-23T00:40:15.546866+00:00",
+  "backend_llm": "ollama",
+  "test_code": {
+    "source": "from src.portfolio.base_portfolio import POSITIONS\nfrom src.portfolio.pricing_models import price_portfolio\nfrom src.portfolio.data_access import load_all_risk_factors\n\nfactors = load_all_risk_factors()\nmarket = {name: s.iloc[-1] for name, s in factors.items()}\nmarket = {k: v * (1 + 0.1) for k, v in market.items()}\nshocked_value = sum(price_portfolio(POSITIONS, market).values())\n# valor_choque = compute({'value': shocked_value}, {'returns': base_returns}, params)['valor']\n",
+    "file": "gerado dinamicamente por 07_stability_tests",
+    "hash": "sha256:15c5cdfa0eaab7e7efec43058d36d9566029b97e5b2dd8d19025d887d3e96b22"
+  },
+  "data_used": {
+    "risk_factors": [
+      "data/risk_factors/di_pre.csv",
+      "data/risk_factors/ipca_real.csv",
+      "data/risk_factors/pre_nominal.csv",
+      "data/risk_factors/ust.csv",
+      "data/risk_factors/sofr.csv",
+      "data/risk_factors/fed_funds.csv",
+      "data/risk_factors/usdbrl.csv",
+      "data/risk_factors/ibov.csv",
+      "data/risk_factors/spx.csv",
+      "data/risk_factors/soja.csv",
+      "data/risk_factors/brent.csv",
+      "data/risk_factors/wti.csv",
+      "data/risk_factors/vol_ibov.csv",
+      "data/risk_factors/vol_spx.csv",
+      "data/risk_factors/vol_usdbrl.csv",
+      "data/risk_factors/vol_juros.csv",
+      "data/risk_factors/spread_debentures.csv",
+      "data/risk_factors/spread_bonds_corp.csv",
+      "data/risk_factors/nmd_decay_rate.csv",
+      "data/risk_factors/cpr.csv"
+    ],
+    "portfolio_snapshot": "src/portfolio/base_portfolio.py:POSITIONS",
+    "scenario": "conjunto",
+    "params": {
+      "choque_pct": 0.1,
+      "metrica_params": {
+        "alpha": 1.4,
+        "SF_fx": 0.04
+      }
+    }
+  },
+  "results": {
+    "metrica": "Exposure at Default (EAD)",
+    "cenario": "conjunto",
+    "fator": "TODOS",
+    "choque": 0.1,
+    "valor_base": 84081521.99427752,
+    "valor_choque": 92605089.37889224,
+    "delta_metrica": 8523567.384614721,
+    "elasticidade": 1.0137265813521814,
+    "flag": "ok",
+    "dentro_do_limite": true
+  },
+  "notes": []
+}
